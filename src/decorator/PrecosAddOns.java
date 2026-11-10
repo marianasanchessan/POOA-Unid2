@@ -2,14 +2,7 @@ package decorator;
 
 public interface PrecosAddOns {
 
-	
-	/*
-	package decorator;
+	Float getPreco();
 
-	public interface PrecosAddOns {
-	    Float getPreco();
-	    String getDescricao();
-	}
-	*/
-	
+	String getExtrato();
 }

@@ -5,8 +5,8 @@ import builder.Obra;
 public class Revista implements Impresso {
 
 	private Obra obra;
-    private double preco;
-	
+	private double preco;
+
 	public Revista(Obra obra, double preco) {
 		super();
 		this.obra = obra;
@@ -26,7 +26,7 @@ public class Revista implements Impresso {
 	@Override
 	public void exibirDetalhes() {
 		System.out.println("Revista: " + obra.getNome());
-		System.out.println("Autor: " + obra.getAutor() );
+		System.out.println("Autor: " + obra.getAutor());
 		System.out.println("Gênero: " + obra.getGenero());
 		System.out.println("Preço: R$ " + preco);
 

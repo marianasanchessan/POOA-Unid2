@@ -1,7 +1,7 @@
 package adapter;
 
 public interface ProcessadorPagamento {
-	
-	public void pagamentoFeliz (double valor);
+
+	public void pagamentoFeliz(double valor);
 
 }

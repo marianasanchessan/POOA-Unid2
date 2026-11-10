@@ -12,7 +12,6 @@ public class Obra {
 		this.genero = builder.genero;
 	}
 
-	// Apenas Getters
 	public String getNome() {
 		return titulo;
 
@@ -30,12 +29,10 @@ public class Obra {
 		private String nome;
 		private String autor;
 		private String genero;
-		
-		
+
 		public Obra build() {
 			return new Obra(this);
 		}
-		
 
 		public ObraBuilder nome(String nome) {
 			this.nome = nome;

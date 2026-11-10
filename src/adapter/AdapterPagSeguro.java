@@ -1,6 +1,6 @@
 package adapter;
 
-public class AdapterPagSeguro implements ProcessadorPagamento{
+public class AdapterPagSeguro implements ProcessadorPagamento {
 
 	@Override
 	public void pagamentoFeliz(double valor) {
