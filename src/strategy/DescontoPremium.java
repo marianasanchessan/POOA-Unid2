@@ -7,7 +7,7 @@ public class DescontoPremium implements EstrategiaDesconto {
 	@Override
 	public void calcular(Float valor) {
 		Float valorDesc = valor * TAXA_DESCONTO;
-		System.out.println("Desconto premium (50%): R$" + valorDesc);
+		System.out.println("Desconto premium (50%): R$" + String.format("%.2f", valorDesc));
 
 	}
 }

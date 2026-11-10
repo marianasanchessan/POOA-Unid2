@@ -15,6 +15,6 @@ public class PresenteDecorator extends AdicionaDecorator {
 
 	@Override
 	public String getExtrato() {
-		return super.getExtrato() + " + Frete " + PAPEL_PRES;
+		return super.getExtrato() + " + Papel de presente " + PAPEL_PRES;
 	}
 }

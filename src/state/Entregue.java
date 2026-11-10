@@ -6,12 +6,12 @@ public class Entregue implements EstadoPedido {
 
 	@Override
 	public void avancar(Pedido pedido) {
-		System.out.println("O pedido já se encontra entregue. Não há mais estados seguintes.");
+		System.out.println("Não há mais passos seguintes.");
 	}
 
 	@Override
 	public void cancelar(Pedido pedido) {
-		System.out.println("Não é possível cancelar um pedido que já foi entregue ao cliente.");
+		System.out.println("Ação impossível.");
 	}
 
 	@Override

@@ -7,7 +7,7 @@ public class SemDesconto implements EstrategiaDesconto {
 	@Override
 	public void calcular(Float valor) {
 		Float valorDesc = valor * TAXA_DESCONTO;
-		System.out.println("Nenhum desconto aplicado: R$" + valorDesc);
+		System.out.println("Nenhum desconto aplicado: R$" + String.format("%.2f", valorDesc));
 
 	}
 }

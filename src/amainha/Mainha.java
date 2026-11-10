@@ -1,92 +1,128 @@
 package amainha;
 
-import builder.Obra;
-
+import adapter.AdapterPagSeguro;
+import adapter.AdapterPayPal;
+import adapter.AdapterPix;
+import adapter.ProcessadorPagamento;
 import decorator.FreteDecorator;
 import decorator.ImportacaoDecorator;
 import decorator.PrecosAddConcretos;
 import decorator.PrecosAddOns;
-
+import decorator.PresenteDecorator;
 import factoryMethod.Impresso;
-import factoryMethod.MangaFactory;
-import factoryMethod.CategoriaFactory;
+import strategy.DescontoCupom;
+import strategy.DescontoPremium;
+import strategy.EstrategiaDesconto;
+import strategy.SemDesconto;
 
 public class Mainha {
 
 	public static void main(String[] args) {
 
-		// IDEIA DE COMO FAZER
-		/*
-		 * public class Main { public static void main(String[] args) {
-		 * 
-		 * // ------------------------------------------------------------- // PASSO 1:
-		 * DECORATOR (Montagem do produto com custos extras) //
-		 * ------------------------------------------------------------- // Obra base de
-		 * R$ 150,00 PrecosAddOns itemFinal = new PrecosAddConcretos(150.0f,
-		 * "Quadro Noite Estrelada");
-		 * 
-		 * // Encadeia frete e embalagem de presente itemFinal = new
-		 * FreteDecorator(itemFinal); // + R$ 15,00 itemFinal = new
-		 * PresenteDecorator(itemFinal); // + R$ 5,00 // Subtotal decorado: R$ 170,00
-		 * 
-		 * // ------------------------------------------------------------- // PASSO 2:
-		 * CRIAR O PEDIDO (State inicial: Criado) //
-		 * ------------------------------------------------------------- Pedido
-		 * meuPedido = new Pedido("PED-1001", itemFinal);
-		 * System.out.println("Status Inicial: " + meuPedido.getStatus()); // Criado
-		 * 
-		 * // ------------------------------------------------------------- // PASSO 3:
-		 * STRATEGY (Definir e aplicar desconto) //
-		 * ------------------------------------------------------------- // Aplicar
-		 * cupão de desconto de 20% meuPedido.setEstrategiaDesconto(new
-		 * DescontoCupom());
-		 * 
-		 * // Processa o pagamento usando o valor gerado pelo Decorator
-		 * meuPedido.processarPagamento();
-		 * 
-		 * // ------------------------------------------------------------- // PASSO 4:
-		 * STATE (Transição do ciclo de vida) //
-		 * -------------------------------------------------------------
-		 * System.out.println("\n--- EVOLUINDO O ESTADO DO PEDIDO ---");
-		 * 
-		 * meuPedido.avancarEstado(); // Transita para: Em Preparo
-		 * System.out.println("Status Atual: " + meuPedido.getStatus());
-		 * 
-		 * meuPedido.avancarEstado(); // Transita para: Enviado
-		 * System.out.println("Status Atual: " + meuPedido.getStatus());
-		 * 
-		 * // Tentativa de cancelamento inválida (bloqueada pelo State Enviado)
-		 * meuPedido.cancelarPedido();
-		 * 
-		 * meuPedido.avancarEstado(); // Transita para: Entregue
-		 * System.out.println("Status Final: " + meuPedido.getStatus()); }
-		 */
+		CatalogoObras catalogo = new CatalogoObras();
+		catalogo.inicializarEstoque();
 
-		/*
-		 * Float precoBaseObra = 100.0f;
-		 * 
-		 * // 1. Strategy calcula o novo valor da obra com desconto Float
-		 * precoComDesconto = desconto.calcularRetornandoValor(precoBaseObra); // Ex: R$
-		 * 80,00
-		 * 
-		 * // 2. Decorator adiciona os serviços extras sobre o valor já com desconto
-		 * PrecosAddOns pedidoFinal = new PrecosAddConcretos(precoComDesconto);
-		 * pedidoFinal = new FreteDecorator(pedidoFinal); // + R$ 15,00 pedidoFinal =
-		 * new ImportacaoDecorator(pedidoFinal); // + R$ 10,00
-		 * 
-		 * Float totalPagar = pedidoFinal.getPreco(); // Resultado final: R$ 105,00
-		 */
+		Impresso itemCatalogo = catalogo.getAcervo().get(0);
+		System.out.println("ITEM SELECIONADO: ");
+		System.out.println(itemCatalogo.getTitulo());
+		itemCatalogo.exibirDetalhes();
 
-		/*
-		 * Pedido meuPedido = new Pedido(); System.out.println("Status: " +
-		 * meuPedido.getStatusAtual()); // Criado
-		 * 
-		 * meuPedido.avancarEstado(); // Transita para: Em Preparo
-		 * meuPedido.avancarEstado(); // Transita para: Enviado
-		 * meuPedido.cancelarPedido(); // Imprime: Não é possível cancelar...
-		 * meuPedido.avancarEstado(); // Transita para: Entregue
-		 */
+		System.out.println(" ");
+		PrecosAddOns itemBase = new PrecosAddConcretos((float) itemCatalogo.getPreco(), itemCatalogo.getTitulo());
+
+		PrecosAddOns carrinho = new PrecosAddConcretos((float) itemCatalogo.getPreco(), itemCatalogo.getTitulo());
+
+		int[] opcoesEscolhidas = { 1, 2, 3 };
+
+		for (int opcao : opcoesEscolhidas) {
+			switch (opcao) {
+			case 1:
+				carrinho = new FreteDecorator(carrinho);
+				break;
+
+			case 2:
+				carrinho = new PresenteDecorator(carrinho);
+				break;
+
+			case 3:
+				carrinho = new ImportacaoDecorator(carrinho);
+				break;
+
+			default:
+				System.out.println("Nenhum adicional aplicado.");
+				break;
+			}
+		}
+
+		PrecosAddOns itemComFrete = new PrecosAddConcretos((float) itemCatalogo.getPreco(), itemCatalogo.getTitulo());
+		PrecosAddOns itemComPresente = new PresenteDecorator(itemComFrete);
+		PrecosAddOns itemFinalDecorado = new ImportacaoDecorator(itemComPresente);
+
+		Pedido pedido = new Pedido("PEDIDO ALEATÓRIO-2026", itemFinalDecorado);
+
+		int tipoDescontoCliente = 1;
+		EstrategiaDesconto desconto = null;
+
+		switch (tipoDescontoCliente) {
+		case 1:
+			desconto = new DescontoCupom();
+			break;
+		case 2:
+			desconto = new DescontoPremium();
+			break;
+		case 0:
+		default:
+			desconto = new SemDesconto();
+			break;
+		}
+
+		pedido.setEstrategiaDesconto(desconto);
+		pedido.processarPagamento();
+
+		double valorTotal = pedido.getSubtotal();
+
+		int bancoOuGateway = 0;
+		ProcessadorPagamento processador = null;
+
+		switch (bancoOuGateway) {
+		case 0:
+			processador = new AdapterPix();
+			break;
+		case 1:
+			processador = new AdapterPayPal();
+			break;
+		case 2:
+			processador = new AdapterPagSeguro();
+			break;
+		default:
+			System.out.println("Opção inválida.");
+			break;
+		}
+
+		processador.pagamentoFeliz(valorTotal);
+		System.out.println(valorTotal);
+
+		System.out.println(" ");
+		
+		System.out.println("Estado Inicial: " + pedido.getStatus());
+
+		System.out.println(" ");
+
+		System.out.println("Avançando estado:");
+		pedido.avancarEstado();
+		System.out.println("Estado Atual: " + pedido.getStatus());
+
+		System.out.println(" ");
+
+		System.out.println("Avançando estado:");
+		pedido.avancarEstado();
+		System.out.println("Estado Atual: " + pedido.getStatus());
+
+		System.out.println(" ");
+
+		System.out.println("Avançando estado:");
+		pedido.avancarEstado();
+		System.out.println("Estado Atual: " + pedido.getStatus());
 
 	}
-
 }

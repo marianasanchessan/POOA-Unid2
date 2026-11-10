@@ -7,7 +7,7 @@ public class DescontoCupom implements EstrategiaDesconto {
 	@Override
 	public void calcular(Float valor) {
 		Float valorDesc = valor * TAXA_DESCONTO;
-		System.out.println("Desconto de cupom (20%): R$" + valorDesc);
+		System.out.println("Desconto de cupom (20%): R$" + String.format("%.2f", valorDesc));
 
 	}
 

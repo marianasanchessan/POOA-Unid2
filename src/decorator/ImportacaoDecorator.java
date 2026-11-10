@@ -15,6 +15,6 @@ public class ImportacaoDecorator extends AdicionaDecorator {
 
 	@Override
 	public String getExtrato() {
-		return super.getExtrato() + " + Frete " + TAXA_IMPORT;
+		return super.getExtrato() + " + Importação " + TAXA_IMPORT;
 	}
 }

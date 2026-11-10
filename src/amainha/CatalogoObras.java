@@ -35,4 +35,8 @@ public class CatalogoObras {
 
 	}
 
+	public List<Impresso> getAcervo() {
+		return acervo;
+	}
+
 }

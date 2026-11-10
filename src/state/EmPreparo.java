@@ -6,13 +6,13 @@ public class EmPreparo implements EstadoPedido {
 
 	@Override
 	public void avancar(Pedido pedido) {
-		System.out.println("Produto embalado! Alterando pedido para: Enviado.");
-		pedido.setEstado(new Enviado());
+		System.out.println("Produto embalado. Prepadado para: Enviado.");
+		pedido.setEstado(new SaiuEntrega());
 	}
 
 	@Override
 	public void cancelar(Pedido pedido) {
-		System.out.println("Preparo interrompido. Pedido cancelado.");
+		System.out.println("Pedido cancelado.");
 	}
 
 	@Override
