@@ -28,7 +28,6 @@ public class Mainha {
 		itemCatalogo.exibirDetalhes();
 
 		System.out.println(" ");
-		PrecosAddOns itemBase = new PrecosAddConcretos((float) itemCatalogo.getPreco(), itemCatalogo.getTitulo());
 
 		PrecosAddOns carrinho = new PrecosAddConcretos((float) itemCatalogo.getPreco(), itemCatalogo.getTitulo());
 
@@ -39,26 +38,19 @@ public class Mainha {
 			case 1:
 				carrinho = new FreteDecorator(carrinho);
 				break;
-
 			case 2:
 				carrinho = new PresenteDecorator(carrinho);
 				break;
-
 			case 3:
 				carrinho = new ImportacaoDecorator(carrinho);
 				break;
-
 			default:
 				System.out.println("Nenhum adicional aplicado.");
 				break;
 			}
 		}
 
-		PrecosAddOns itemComFrete = new PrecosAddConcretos((float) itemCatalogo.getPreco(), itemCatalogo.getTitulo());
-		PrecosAddOns itemComPresente = new PresenteDecorator(itemComFrete);
-		PrecosAddOns itemFinalDecorado = new ImportacaoDecorator(itemComPresente);
-
-		Pedido pedido = new Pedido("PEDIDO ALEATÓRIO-2026", itemFinalDecorado);
+		Pedido pedido = new Pedido("PEDIDO ALEATÓRIO-2026", carrinho);
 
 		int tipoDescontoCliente = 1;
 		EstrategiaDesconto desconto = null;
@@ -77,9 +69,10 @@ public class Mainha {
 		}
 
 		pedido.setEstrategiaDesconto(desconto);
-		pedido.processarPagamento();
+		
+		pedido.processarPagamento(); 
 
-		double valorTotal = pedido.getSubtotal();
+		double valorTotal = pedido.getTotalFinal();
 
 		int bancoOuGateway = 0;
 		ProcessadorPagamento processador = null;
@@ -99,8 +92,9 @@ public class Mainha {
 			break;
 		}
 
-		processador.pagamentoFeliz(valorTotal);
-		System.out.println(valorTotal);
+		if (processador != null) {
+			processador.pagamentoFeliz(valorTotal);
+		}
 
 		System.out.println(" ");
 		
@@ -123,6 +117,5 @@ public class Mainha {
 		System.out.println("Avançando estado:");
 		pedido.avancarEstado();
 		System.out.println("Estado Atual: " + pedido.getStatus());
-
 	}
 }

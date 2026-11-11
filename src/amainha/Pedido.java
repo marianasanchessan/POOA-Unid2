@@ -11,12 +11,14 @@ public class Pedido {
 	private PrecosAddOns itensComAddOns;
 	private EstrategiaDesconto estrategiaDesconto;
 	private EstadoPedido estadoAtual;
+	private double totalFinal;
 
 	public Pedido(String id, PrecosAddOns itensComAddOns) {
 		this.id = id;
 		this.itensComAddOns = itensComAddOns;
 		this.estrategiaDesconto = new SemDesconto();
 		this.estadoAtual = new Pago();
+		
 	}
 
 	public void processarPagamento() {
@@ -26,10 +28,19 @@ public class Pedido {
 		System.out.println("Subtotal acumulado: R$" + String.format("%.2f", subtotal));
 		System.out.print("Resultado do Desconto: ");
 
-		this.estrategiaDesconto.calcular(subtotal);
+		if (this.estrategiaDesconto != null) {
+       
+            this.totalFinal = this.estrategiaDesconto.calcular(subtotal);
+        } else {
+            this.totalFinal = subtotal;
+        }
 		System.out.println(" ");
 	}
 
+	public double getTotalFinal() {
+        return this.totalFinal;
+    }
+	
 	public Float getSubtotal() {
 		return this.itensComAddOns.getPreco();
 	}
